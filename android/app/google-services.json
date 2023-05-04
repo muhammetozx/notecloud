@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "875394948872",
+    "project_id": "notecloud-nack",
+    "storage_bucket": "notecloud-nack.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875394948872:android:33dd7bc10f064cb3d716bd",
+        "android_client_info": {
+          "package_name": "com.example.notecloud"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "875394948872-pvbme7ffoe5b3bmsielh4jtodksklhqb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBaaoI-JZ_F7psD5F830b_7CwHiLQi1h8g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875394948872-ag7n6bfc1dmfuudcje3qk8h69js57b3k.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "875394948872-9qd9s8s5dr64k4a1dq3csgfolivqnhb8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.nackcloud"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
