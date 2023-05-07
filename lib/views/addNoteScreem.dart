@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:notecloud/views/homeScreen.dart';
 import '../style/appStyle.dart';
 
 class AddNoteScreen extends StatefulWidget {
@@ -33,7 +34,9 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
             Spacer(),
             IconButton(
                 onPressed: () {
-                  orderAdd();
+                  //orderAdd();
+                  noteAdd();
+                   Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.check,
@@ -59,7 +62,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
               height: 8.0,
             ),
             Text(
-              "${date.day}.${date.month}.${date.year}",
+              "${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}",
               style: AppStyle.dateTitle,
             ),
             SizedBox(
@@ -82,6 +85,28 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
 
   final user = FirebaseAuth.instance.currentUser!;
   FirebaseAuth auth = FirebaseAuth.instance;
+  noteAdd() {
+    FirebaseFirestore.instance.collection('Users')
+    .doc(user.email).set(
+      {'noteArray': FieldValue.arrayUnion(
+        [{
+          'userId': auth.currentUser?.uid,
+          'note_title': titleTextControllter.text,
+          'creation_date': date,
+          'note_content': mainTextController.text,
+          'color_id': colorId,
+        }]),
+      },
+      SetOptions(merge: true),
+    );
+  }
+
+
+
+}
+
+
+ /*
   orderAdd() {
     FirebaseFirestore.instance.collection('Users').doc(user.email).set({
       'userId.name': auth.currentUser?.uid,
@@ -90,8 +115,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
       'note_content': mainTextController.text,
       'color_id': colorId,
     });
-  }
-}
+  }*/
 
 /*
   noteAdd() {

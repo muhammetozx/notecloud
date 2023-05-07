@@ -1,8 +1,11 @@
+// ignore_for_file: file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notecloud/views/addNoteScreem.dart';
 import 'package:notecloud/views/loginScreen.dart';
+import 'package:notecloud/views/noteListScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -37,11 +40,33 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [],
-        ),
-      ),
+        
+      body: NoteListScreen(),
+      
+      
+      
+       /* StreamBuilder<QuerySnapshot> (
+                stream: FirebaseFirestore.instance.collection('Users/email/noteArray').snapshots(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if(snapshot.connectionState == ConnectionState.waiting){
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if(snapshot.hasData){
+                    return GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2 ),
+                        children: snapshot.data.docs
+                        .map((note) => noteCard((){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => NoteReaderScreen(note)));
+                        }, note)).toList(),
+                    );
+                  }
+                  return Text("ther's no Notes", style: GoogleFonts.nunito(color: Colors.white));
+                },
+              ), */
+        
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
