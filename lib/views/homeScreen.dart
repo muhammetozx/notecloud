@@ -3,7 +3,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:notecloud/views/addNoteScreem.dart';
+import 'package:notecloud/views/addNoteScreen.dart';
 import 'package:notecloud/views/loginScreen.dart';
 import 'package:notecloud/views/noteListScreen.dart';
 
@@ -24,28 +24,26 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Row(
           children: [
             CircleAvatar(
-              backgroundImage: NetworkImage(user.photoURL!),
-            ),
+                //backgroundImage: NetworkImage(user.photoURL!),
+                ),
             SizedBox(width: 5),
             Text(
-              user.displayName!,
+              user.email!,
               style: TextStyle(fontSize: 15),
             ),
             Spacer(),
             IconButton(
                 onPressed: () {
                   logout();
+                  //emailSignOut();
                 },
                 icon: Icon(Icons.exit_to_app_outlined)),
           ],
         ),
       ),
-        
       body: NoteListScreen(),
-      
-      
-      
-       /* StreamBuilder<QuerySnapshot> (
+
+      /* StreamBuilder<QuerySnapshot> (
                 stream: FirebaseFirestore.instance.collection('Users/email/noteArray').snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if(snapshot.connectionState == ConnectionState.waiting){
@@ -66,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Text("ther's no Notes", style: GoogleFonts.nunito(color: Colors.white));
                 },
               ), */
-        
+
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(context,
@@ -79,10 +77,21 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   logout() async {
-    await GoogleSignIn().disconnect();
-    FirebaseAuth.instance.signOut();
+    if (await GoogleSignIn().isSignedIn())
+      await GoogleSignIn().disconnect();
+    else
+      await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => LoginScreen()));
     print("Çıkış yapıldı");
   }
+
+  /* emailSignOut() {
+    FirebaseAuth.instance.signOut().then((value) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => LoginScreen()),
+          (Route<dynamic> route) => false);
+    });
+  } */
 }
