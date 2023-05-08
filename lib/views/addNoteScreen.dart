@@ -36,7 +36,7 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
                 onPressed: () {
                   //orderAdd();
                   noteAdd();
-                   Navigator.pop(context);
+                  Navigator.pop(context);
                 },
                 icon: Icon(
                   Icons.check,
@@ -86,23 +86,21 @@ class _AddNoteScreenState extends State<AddNoteScreen> {
   final user = FirebaseAuth.instance.currentUser!;
   FirebaseAuth auth = FirebaseAuth.instance;
   noteAdd() {
-    FirebaseFirestore.instance.collection('Users')
-    .doc(user.email).set(
-      {'noteArray': FieldValue.arrayUnion(
-        [{
-          'userId': auth.currentUser?.uid,
-          'note_title': titleTextControllter.text,
-          'creation_date': date,
-          'note_content': mainTextController.text,
-          'color_id': colorId,
-        }]),
+    FirebaseFirestore.instance.collection('Users').doc(user.email).set(
+      {
+        'noteArray': FieldValue.arrayUnion([
+          {
+            'userId': auth.currentUser?.uid,
+            'note_title': titleTextControllter.text,
+            'creation_date': date,
+            'note_content': mainTextController.text,
+            'color_id': colorId,
+          }
+        ]),
       },
       SetOptions(merge: true),
     );
   }
-
-
-
 }
 
 
