@@ -17,38 +17,67 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final user = FirebaseAuth.instance.currentUser!;
+  var info;
+  late String type;
 
-  getPhotoUrl() async {}
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future opening() async {
+    if ((ModalRoute.of(context)!.settings.arguments as Map)['type'] ==
+        'google') {
+      info = (ModalRoute.of(context)!.settings.arguments as Map)['info']
+          as GoogleSignInAccount;
+      type = 'google';
+    } else {
+      info = (ModalRoute.of(context)!.settings.arguments as Map)['info']
+          ['userInfo'];
+      type = 'email';
+    }
+    await Future.delayed(Duration.zero);
+    return;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0.0,
-        title: Row(
-          children: [
-            CircleAvatar(
-                //backgroundImage: NetworkImage(user.photoURL!),
-                ),
-            SizedBox(width: 5),
-            Text(
-              user.email!,
-              style: TextStyle(fontSize: 15),
+    return FutureBuilder(
+      future: opening(),
+      builder: (context, snapshot) {
+        print(snapshot.connectionState);
+        if (snapshot.connectionState == ConnectionState.done) {
+          return Scaffold(
+            appBar: AppBar(
+              elevation: 0.0,
+              title: Row(
+                children: [
+                  IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
+                  CircleAvatar(
+                    backgroundImage: NetworkImage(type == 'google'
+                        ? (info as GoogleSignInAccount).photoUrl
+                        : info['imageLink']),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    type == 'google'
+                        ? (info as GoogleSignInAccount).email
+                        : info['email'],
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  Spacer(),
+                  IconButton(
+                      onPressed: () {
+                        logout();
+                        //emailSignOut();
+                      },
+                      icon: Icon(Icons.exit_to_app_outlined)),
+                ],
+              ),
             ),
-            Spacer(),
-            IconButton(
-                onPressed: () {
-                  logout();
-                  //emailSignOut();
-                },
-                icon: Icon(Icons.exit_to_app_outlined)),
-          ],
-        ),
-      ),
-      body: NoteListScreen(),
+            body: NoteListScreen(),
 
-      /* StreamBuilder<QuerySnapshot> (
+            /* StreamBuilder<QuerySnapshot> (
                 stream: FirebaseFirestore.instance.collection('Users/email/noteArray').snapshots(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if(snapshot.connectionState == ConnectionState.waiting){
@@ -70,14 +99,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ), */
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => AddNoteScreen()));
-        },
-        backgroundColor: Colors.grey[100],
-        child: Icon(Icons.add),
-      ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => AddNoteScreen()));
+              },
+              backgroundColor: Colors.grey[100],
+              child: Icon(Icons.add),
+            ),
+          );
+        }
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 

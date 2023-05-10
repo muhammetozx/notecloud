@@ -1,10 +1,16 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:notecloud/views/homeScreen.dart';
 import 'package:notecloud/views/signUpScreen.dart';
 import 'package:sign_button/sign_button.dart';
+
+import '../utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,9 +20,12 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  TextEditingController emailTextEditingController = TextEditingController();
-  TextEditingController passwordTextEditingController = TextEditingController();
+  TextEditingController emailTextEditingController =
+      TextEditingController(text: 'muhammetozx@icloud.com');
+  TextEditingController passwordTextEditingController =
+      TextEditingController(text: '123456');
   bool obscureText = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -144,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (googleUser == null) {
         return;
       }
-      
+
       final googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
@@ -161,6 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
           'userInfo': {
             'name_surname': userCredential.user!.displayName,
             'email': userCredential.user!.email,
+            'imageLink': userCredential.user!.photoURL,
           },
         },
         SetOptions(merge: true),
@@ -175,8 +185,10 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         SetOptions(merge: true),
       );
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => HomeScreen()));
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => HomeScreen(),
+          settings: RouteSettings(
+              arguments: {'info': googleUser, 'type': 'google'})));
       print(googleUser.displayName);
       print(googleUser.email);
       print(googleUser.photoUrl);
@@ -185,6 +197,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+//settings: RouteSettings(arguments: googleUser)
   emailLogin() async {
     var loginEmail = emailTextEditingController.text.trim();
     var loginPassword = passwordTextEditingController.text.trim();
@@ -196,8 +209,16 @@ class _LoginScreenState extends State<LoginScreen> {
           .user;
 
       if (firebaseUser != null) {
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => HomeScreen()));
+        final snaps = await FirebaseFirestore.instance
+            .collection('Users')
+            .doc(firebaseUser.email)
+            .get();
+        final info = snaps.data();
+
+        Navigator.of(context).pushReplacement(MaterialPageRoute(
+            builder: (context) => HomeScreen(),
+            settings:
+                RouteSettings(arguments: {'info': info, 'type': 'email'})));
       } else {
         print("Check email & password");
       }

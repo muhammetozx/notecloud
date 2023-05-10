@@ -67,35 +67,38 @@ class _NoteListScreenState extends State<NoteListScreen> {
                             settings: RouteSettings(
                                 arguments: itemDeteilList[index])));
                   },
-                  child: Card(
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      margin: EdgeInsets.all(1.0),
-                      decoration: BoxDecoration(
-                        color: AppStyle.cardsColor[color_id],
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('$note_title', style: AppStyle.mainTitle),
-                          SizedBox(height: 5),
-                          Text('$note_content',
-                              style: AppStyle.mainContent,
-                              overflow: TextOverflow.ellipsis),
-                          Spacer(),
-                          Text(
-                              '${creation_date.day.toString().padLeft(2, '0')}/${creation_date.month.toString().padLeft(2, '0')}/${creation_date.year}',
-                              style: TextStyle(fontSize: 11)),
-                        ],
-                      ),
+                  child: Container(
+                    padding: EdgeInsets.all(12.0),
+                    margin: EdgeInsets.all(1.0),
+                    decoration: BoxDecoration(
+                      color: AppStyle.cardsColor[color_id],
+                      borderRadius: BorderRadius.circular(18.0),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('$note_title', style: AppStyle.mainTitle),
+                        SizedBox(height: 5),
+                        Text('$note_content',
+                            style: AppStyle.mainContent,
+                            overflow: TextOverflow.ellipsis),
+                        Spacer(),
+                        Text(
+                            '${creation_date.day.toString().padLeft(2, '0')}/${creation_date.month.toString().padLeft(2, '0')}/${creation_date.year}',
+                            style: TextStyle(fontSize: 11)),
+                      ],
                     ),
                   ),
                 );
               },
             );
           }
-          return Text('boş');
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text('Not eklemek için + tuşuna dokunun.')],
+            ),
+          );
         });
   }
 }

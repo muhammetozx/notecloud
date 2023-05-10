@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:notecloud/utils.dart';
+import 'package:notecloud/views/loginScreen.dart';
 
 class signUpScreen extends StatefulWidget {
   const signUpScreen({super.key});
@@ -176,6 +177,12 @@ class _signUpScreenState extends State<signUpScreen> {
                 child: ElevatedButton(
                   onPressed: () {
                     signUpEmail();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Kayıt başarılı"),
+                      duration: Duration(seconds: 2),
+                    ));
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoginScreen()));
                   },
                   child: Text("SignUp"),
                 ),
@@ -194,9 +201,10 @@ class _signUpScreenState extends State<signUpScreen> {
         .child("UsersProfilePhoto")
         .child(emailTextEditingController.text);
     UploadTask uploadTask = ref.putData(image!);
-    TaskSnapshot snapshot = await uploadTask;
-    downloadUrl = await snapshot.ref.getDownloadURL();
-    print("${downloadUrl}");
+      TaskSnapshot snapshot = await uploadTask;
+      downloadUrl = await snapshot.ref.getDownloadURL();
+      print("${downloadUrl}");
+    
     //-----------------------------
     FirebaseAuth auth = FirebaseAuth.instance;
     await FirebaseAuth.instance
