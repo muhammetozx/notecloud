@@ -1,13 +1,11 @@
 // ignore_for_file: file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:notecloud/views/addNoteScreen.dart';
 import 'package:notecloud/views/loginScreen.dart';
 import 'package:notecloud/views/noteListScreen.dart';
+import 'package:notecloud/views/profileScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -52,19 +50,26 @@ class _HomeScreenState extends State<HomeScreen> {
               elevation: 0.0,
               title: Row(
                 children: [
-                  IconButton(onPressed: () {}, icon: Icon(Icons.menu)),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(type == 'google'
-                        ? (info as GoogleSignInAccount).photoUrl
-                        : info['imageLink']),
+                  InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProfileScreen()));
+                    },
+                    child: CircleAvatar(
+                      backgroundImage: NetworkImage(type == 'google'
+                          ? (info as GoogleSignInAccount).photoUrl
+                          : info['imageLink']),
+                    ),
                   ),
                   SizedBox(width: 5),
-                  Text(
+                  /* Text(
                     type == 'google'
                         ? (info as GoogleSignInAccount).email
                         : info['email'],
                     style: TextStyle(fontSize: 15),
-                  ),
+                  ), */
                   Spacer(),
                   IconButton(
                       onPressed: () {

@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:notecloud/views/forgotPasswordScreen.dart';
 import 'package:notecloud/views/homeScreen.dart';
 import 'package:notecloud/views/signUpScreen.dart';
 import 'package:sign_button/sign_button.dart';
@@ -100,10 +101,18 @@ class _LoginScreenState extends State<LoginScreen> {
               onTap: () {},
               child: Container(
                   alignment: Alignment.topCenter,
-                  child: Text(
-                    "Forgot Password",
-                    style: TextStyle(
-                        color: Colors.blue, fontWeight: FontWeight.bold),
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => forgotPasswordScreen()));
+                    },
+                    child: Text(
+                      "Forgot Password",
+                      style: TextStyle(
+                          color: Colors.blue, fontWeight: FontWeight.bold),
+                    ),
                   )),
             ),
             SizedBox(height: 20),
@@ -185,10 +194,15 @@ class _LoginScreenState extends State<LoginScreen> {
         },
         SetOptions(merge: true),
       );
-      Navigator.of(context).pushReplacement(MaterialPageRoute(
-          builder: (context) => HomeScreen(),
-          settings: RouteSettings(
-              arguments: {'info': googleUser, 'type': 'google'})));
+
+              Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+                settings:
+                    RouteSettings(arguments: {'info': googleUser, 'type': 'google'})),
+            (Route<dynamic> route) => false);
+
+              
       print(googleUser.displayName);
       print(googleUser.email);
       print(googleUser.photoUrl);
@@ -215,10 +229,17 @@ class _LoginScreenState extends State<LoginScreen> {
             .get();
         final info = snaps.data();
 
-        Navigator.of(context).pushReplacement(MaterialPageRoute(
+        /*  Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => HomeScreen(),
             settings:
-                RouteSettings(arguments: {'info': info, 'type': 'email'})));
+                RouteSettings(arguments: {'info': info, 'type': 'email'}))); */
+
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(
+                builder: (context) => HomeScreen(),
+                settings:
+                    RouteSettings(arguments: {'info': info, 'type': 'email'})),
+            (Route<dynamic> route) => false);
       } else {
         print("Check email & password");
       }
